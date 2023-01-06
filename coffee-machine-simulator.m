@@ -53,9 +53,9 @@ end
 for i = 1:3
 	for j = 1:3
 		if (3*(i-1) + j > length(data.coffeeNames)) break; end
-		axes('Parent', coffeeMenu,'position', [(j-0.85)/3 1-i/3+0.2/3 .7/3 0.8/3], 'xtick', [], 'ytick', [], 'xlim', [0 1], 'ylim', [0 1], 'Color', primaryColor);
+		imageAxis = axes('Parent', coffeeMenu,'position', [(j-0.975)/3 (3.25 - i)/3 0.95/3 0.7/3], 'xtick', [], 'ytick', [], 'xlim', [0 1], 'ylim', [0 1], 'Color', primaryColor);
 		imshow(strcat('./Images/', data.coffeeNames{3*(i-1) + j}, '.png'), []);
-    		data.coffeeOrderButtons = [data.coffeeOrderButtons uicontrol(coffeeMenu, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Order","position", [(j-0.85)/3 1-i/3 .7/3 0.2/3], 'Max', 5, 'Min', 0, 'enable', 'on', 'callback', {@orderCoffee,3*(i-1) + j })];
+		data.coffeeOrderButtons = [data.coffeeOrderButtons uicontrol(coffeeMenu, 'Style', 'pushbutton', 'units', 'normalized' ,"string", strcat("Order ", data.coffeeNames{3*(i-1) + j}),"position", [(j-0.85)/3 1-i/3 .7/3 0.2/3], 'enable', 'on', 'callback', {@orderCoffee,3*(i-1) + j })];
 	end
 end
 
