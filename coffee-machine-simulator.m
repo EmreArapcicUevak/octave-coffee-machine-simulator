@@ -32,6 +32,9 @@ coffeeMenu = uipanel('Parent', leftHalf, 'position', [0.025 0.05 0.95 .9]);
 % Set up all elements
 consoleOutput = uicontrol(rightHalf, 'Style', 'edit', 'units', 'normalized' ,"string", "plot title: (text)","position", [0.05 0.85 0.9 0.13], 'Max', 5, 'Min', 0, 'enable', 'off');
 
+% Set up title
+uicontrol('parent', titleFrame, 'Style', 'text', 'units', 'normalized' ,"string", "IUS COFFEE","position", [0 0 1 1], 'backgroundcolor', primaryColor, 'fontsize', 18);
+
 % Set up KeyPad Buttons
 for i = 1:4
 	for j = 1:3
