@@ -55,10 +55,15 @@ for i = 1:3
 		if (3*(i-1) + j > length(data.coffeeNames)) break; end
 		axes('Parent', coffeeMenu,'position', [(j-0.85)/3 1-i/3+0.2/3 .7/3 0.8/3], 'xtick', [], 'ytick', [], 'xlim', [0 1], 'ylim', [0 1], 'Color', primaryColor);
 		imshow(strcat('./Images/', data.coffeeNames{3*(i-1) + j}, '.png'), []);
-    		data.coffeeOrderButtons = [data.coffeeOrderButtons uicontrol(coffeeMenu, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Order","position", [(j-0.85)/3 1-i/3 .7/3 0.2/3], 'Max', 5, 'Min', 0, 'enable', 'on')];
+    		data.coffeeOrderButtons = [data.coffeeOrderButtons uicontrol(coffeeMenu, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Order","position", [(j-0.85)/3 1-i/3 .7/3 0.2/3], 'Max', 5, 'Min', 0, 'enable', 'on', 'callback', {@orderCoffee,3*(i-1) + j })];
 	end
+end
+
+% Coffee Menu callback function
+function orderCoffee(hObject, eventData, coffeeIndex)
+	data = guidata(hObject);
+  	printf('The user ordered %s which we currently have %dx in stock\n', data.coffeeNames{coffeeIndex}, data.coffeeCount(coffeeIndex));
 end
 
 guidata(mainFrame, data);
 set(consoleOutput,'string', 'test');
-display(data.coffeeNames);
