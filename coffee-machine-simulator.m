@@ -7,7 +7,14 @@ close all;
 
 % Initilize needed variables
 primaryColor = '#f2b085'; secondaryColor = '#85c7f2'; textColor = '#77AC30';
-data.coffeeCount = ones(1,6);
+data.coffeeCount = ones(1,6) .* 5;
+data.coffeeNames = cell(1, 6);
+data.coffeeNames{1} = "Black Coffee"; 
+data.coffeeNames{2} = "Coffee Light"; 
+data.coffeeNames{3} = "Cafe Late"; 
+data.coffeeNames{4} = "Cappuccino"; 
+data.coffeeNames{5} = "Cafe Mocha"; 
+data.coffeeNames{6} = "Hot Chocolate"; 
 
 % Set up all needed frames
 mainFrame = figure('position', [0 0 700 500], 'Name', 'Coffe Machine', 'NumberTitle', 'off');
@@ -28,17 +35,18 @@ consoleOutput = uicontrol(rightHalf, 'Style', 'edit', 'units', 'normalized' ,"st
 for i = 1:4
 	for j = 1:3
 		if (i != 4)
-			uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", num2str(3*(i-1) + j - 1),"position", [1/3*(j-1) 1-1/4*i 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'off');
+			uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", num2str(3*(i-1) + j - 1),"position", [1/3*(j-1) 1-1/4*i 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
 		else
 			if (j == 2)	
-				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "9","position", [1/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'off');
+				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "9","position", [1/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
 			elseif (j == 1)
-				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Yes","position", [0 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'off');
+				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Yes","position", [0 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
 			else
-				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "No","position", [2/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'off');
+				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "No","position", [2/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
 			end
 		end
 	end
 end
 guidata(mainFrame, data);
 set(consoleOutput,'string', 'test');
+display(data.coffeeNames);
