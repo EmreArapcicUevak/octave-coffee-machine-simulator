@@ -39,14 +39,14 @@ uicontrol('parent', titleFrame, 'Style', 'text', 'units', 'normalized' ,"string"
 for i = 1:4
 	for j = 1:3
 		if (i != 4)
-			uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", num2str(3*(i-1) + j - 1),"position", [1/3*(j-1) 1-1/4*i 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
+			uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", num2str(3*(i-1) + j - 1),"position", [1/3*(j-1) 1-1/4*i 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on', 'fontsize', 14, 'backgroundcolor', secondaryColor);
 		else
 			if (j == 2)
-				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "9","position", [1/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
+				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "9","position", [1/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on', 'fontsize', 14,'backgroundcolor', secondaryColor);
 			elseif (j == 1)
-				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Yes","position", [0 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
+				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Yes","position", [0 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on', 'fontsize', 14,'backgroundcolor', secondaryColor);
 			else
-				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "No","position", [2/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on');
+				uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "No","position", [2/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on', 'fontsize', 14,'backgroundcolor', secondaryColor);
 			end
 		end
 	end
@@ -67,6 +67,7 @@ function orderCoffee(hObject, eventData, coffeeIndex)
 	data = guidata(hObject);
   	outputText = sprintf('The user ordered %s which we currently have %dx in stock\n', data.coffeeNames{coffeeIndex}, data.coffeeCount(coffeeIndex));
 	set(data.consoleOutput,'string', outputText);
+	guidata(mainFrame, data);
 end
 
 guidata(mainFrame, data);
