@@ -7,7 +7,6 @@ close all;
 
 % Initilize needed variables
 primaryColor = '#787878'; secondaryColor = '#cdcdcd'; textColor = '#77AC30';
-data.coffeeCount = ones(1,6) .* 5;
 data.coffeeOrderButtons = [];
 data.coffeeNames = cell(1, 6);
 data.coffeeNames{1} = "Black Coffee";
@@ -63,12 +62,5 @@ for i = 1:3
 	end
 end
 
-% Coffee Menu callback function
-function orderCoffee(hObject, eventData, coffeeIndex)
-	data = guidata(hObject);
-  	outputText = sprintf('The user ordered %s which we currently have %dx in stock\n', data.coffeeNames{coffeeIndex}, data.coffeeCount(coffeeIndex));
-	set(data.consoleOutput,'string', outputText);
-	guidata(hObject, data);
-end
 
 guidata(mainFrame, data);
