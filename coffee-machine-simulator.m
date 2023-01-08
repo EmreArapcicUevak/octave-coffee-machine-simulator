@@ -22,7 +22,7 @@ titleFrame = uipanel('Parent', mainFrame, 'position', [0 .85 1 .15],'HighLightCo
 
 rightHalf = uipanel('Parent', mainFrame, 'position', [0.5 0 0.5 .85],'backgroundcolor', primaryColor, 'HighLightColor', primaryColor );
 keypadFrame = uipanel('Parent', rightHalf, 'position', [0.05 0.3 0.5 0.5],'HighLightColor', primaryColor );
-coffeSlotFrame = uipanel('Parent', rightHalf, 'position', [0.5-0.35/2 0.025 0.35 0.23],'HighLightColor', primaryColor );
+coffeSlotFrame = uipanel('Parent', rightHalf, 'position', [0.6 0.3 0.35 0.5],'HighLightColor', primaryColor );
 
 leftHalf = uipanel('Parent', mainFrame, 'position', [0 0 .5 0.85],'backgroundcolor', primaryColor ,'HighLightColor', primaryColor );
 coffeeMenu = uipanel('Parent', leftHalf, 'position', [0.025 0.05 0.95 .9], 'backgroundcolor', primaryColor,'HighLightColor', primaryColor );
