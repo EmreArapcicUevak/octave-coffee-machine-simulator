@@ -10,6 +10,15 @@ function coffeeMachineSimulator()
   # Set up the GUI of the application
   setupGUI();
 
+  # Starts the application process
+  pause(2);
+  data = guidata(gcf());
+  set(data.consoleOutput, "string", "Please select the coffee you want");
+  data.enableButtons = 1;
+  guidata(gcf(), data);
+
+  # TESTING _---------------------------------
+
   data = guidata(gcf());
   #set(data.consoleOutput, "string", "vedad");
 
@@ -28,6 +37,13 @@ function setupGUI()
   data.coffeeNames{4} = "Cappuccino";
   data.coffeeNames{5} = "Cafe Mocha";
   data.coffeeNames{6} = "Hot Chocolate";
+  data.coffeeNames{7} = "Americano";
+  data.coffeeNames{8} = "Espresso";
+  data.coffeeNames{9} = "Choco Milk";
+  data.enableButtons = 0;
+  data.enableInteractions = 0;
+  data.number = "";
+  data.numberEntered = 0;
 
   # Set up all needed frames
   mainFrame = figure('position', [0 0 800 600], 'Name', 'Coffee Machine', 'NumberTitle', 'off','color', primaryColor,'toolbar','none', 'resize', 'off');
@@ -41,7 +57,7 @@ function setupGUI()
   coffeeMenu = uipanel('Parent', leftHalf, 'position', [0.025 0.05 0.95 .9], 'backgroundcolor', primaryColor,'HighLightColor', primaryColor );
 
   # Set up all elements
-  data.consoleOutput = uicontrol(rightHalf, 'Style', 'edit', 'units', 'normalized' ,"string", "Do you want coffee bitch???","position", [0.05 0.85 0.9 0.13], 'Max', 5, 'Min', 0, 'enable', 'off','backgroundcolor', '#000000');
+  data.consoleOutput = uicontrol(rightHalf, 'Style', 'edit', 'units', 'normalized' ,"string", "IUS Coffee Machine","position", [0.05 0.85 0.9 0.13], 'Max', 5, 'Min', 0, 'enable', 'off',"backgroundcolor", "#000000");
 
   # Set up title
   uicontrol('parent', titleFrame, 'Style', 'text', 'units', 'normalized' ,"string", "IUS COFFEE","position", [0 0 1 1], 'backgroundcolor', primaryColor, 'fontsize', 18);
@@ -68,7 +84,7 @@ function setupGUI()
 			  elseif (j == 1)
 				  uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "Yes", 'callback', { @buttonPressed, "yes" }, "position", [0 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on', 'fontsize', 14,'backgroundcolor', secondaryColor);
 			  else
-				  uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "No", 'callback', { @buttonPressed, "no" }, "position", [2/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on', 'fontsize', 14,'backgroundcolor', secondaryColor);
+				  uicontrol(keypadFrame, 'Style', 'pushbutton', 'units', 'normalized' ,"string", "No", 'callback', { @buttonPressed, "no " }, "position", [2/3 0 1/3 1/4], 'Max', 5, 'Min', 0, 'enable', 'on', 'fontsize', 14,'backgroundcolor', secondaryColor);
 			  end
 		  end
 	  end
@@ -93,7 +109,28 @@ endfunction
 function buttonPressed(hObject, eventdata, value)
 
   data = guidata(gcf());
-  set(data.consoleOutput, "string", value);
+
+  if (data.enableButtons != 1)
+    display("TEST");
+    return;
+  endif
+
+  if (value == "yes")
+
+  elseif (value == "no ")
+    if (data.numberEntered == 0)
+      data.number = "";
+      set(data.consoleOutput, "string", data.number);
+    else
+
+    endif
+  else
+    data.number = strcat(data.number, value);
+    display(data.number);
+    set(data.consoleOutput, "string", data.number);
+  endif
+
+  guidata(gcf(), data);
 
 endfunction
 
