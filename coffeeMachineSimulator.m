@@ -11,10 +11,11 @@ function coffeeMachineSimulator()
   setupGUI();
 
   # Starts the application process
-  pause(2);
+  pause(1);
   data = guidata(gcf());
   set(data.consoleOutput, "string", "Please select the coffee you want");
   data.enableButtons = 1;
+  data.enableNumbers = 1;
   guidata(gcf(), data);
 
   # TESTING _---------------------------------
@@ -40,10 +41,24 @@ function setupGUI()
   data.coffeeNames{7} = "Americano";
   data.coffeeNames{8} = "Espresso";
   data.coffeeNames{9} = "Choco Milk";
+  data.coffeePrice{1} = 1;
+  data.coffeePrice{2} = 1.5;
+  data.coffeePrice{3} = 3.25;
+  data.coffeePrice{4} = 2;
+  data.coffeePrice{5} = 5.65;
+  data.coffeePrice{6} = 0.80;
+  data.coffeePrice{7} = 10.95;
+  data.coffeePrice{8} = 4.20;
+  data.coffeePrice{9} = 0.80;
   data.enableButtons = 0;
+  data.enableNumbers = 0;
   data.enableInteractions = 0;
   data.number = "";
   data.numberEntered = 0;
+  data.askForExtraSugar = 0;
+  data.askForExtraMilk = 0;
+  data.extraMilk = 0;
+  data.extraSugar = 0;
 
   # Set up all needed frames
   mainFrame = figure('position', [0 0 800 600], 'Name', 'Coffee Machine', 'NumberTitle', 'off','color', primaryColor,'toolbar','none', 'resize', 'off');
@@ -106,6 +121,7 @@ function setupGUI()
 
 endfunction
 
+
 function buttonPressed(hObject, eventdata, value)
 
   data = guidata(gcf());
@@ -117,7 +133,61 @@ function buttonPressed(hObject, eventdata, value)
 
   if (value == "yes")
 
+    if (data.askForExtraMilk == 1)
+      data.askForExtraMilk = 0;
+      data.askForExtraSugar = 0;
+      data.extraMilk = 1;
+      pause(1);
+      set(data.consoleOutput, "string", cstrcat("The total is ", num2str(data.coffeePrice{str2num(data.number)}), "KM"));
+      data.enableButtons = 0;
+      data.enableInteractions = 1;
+    endif
+
+    if (data.askForExtraSugar == 1)
+      data.askForExtraSugar = 0;
+      data.extraSugar = 1;
+      pause(1);
+      set(data.consoleOutput, "string", "Do you want extra milk?");
+      data.askForExtraMilk = 1;
+    endif
+
+    if (data.numberEntered == 0)
+        if (str2num(data.number) == 1 || str2num(data.number) == 2 || str2num(data.number) == 3 || str2num(data.number) == 4 || str2num(data.number) == 5 || str2num(data.number) == 6 || str2num(data.number) == 7 || str2num(data.number) == 8 || str2num(data.number) == 9)
+          set(data.consoleOutput, "string", strcat(data.coffeeNames{str2num(data.number)}, " selected."));
+          pause(1);
+          data.numberEntered = 1;
+          data.enableNumbers = 0;
+          set(data.consoleOutput, "string", "Do you want extra sugar?");
+          data.askForExtraSugar = 1;
+        else
+          set(data.consoleOutput, "string", "Wrong number entered.");
+          pause(2);
+          data.number = "";
+          set(data.consoleOutput, "string", data.number);
+        endif
+    else
+
+    endif
   elseif (value == "no ")
+
+    if (data.askForExtraMilk == 1)
+      data.askForExtraMilk = 0;
+      data.askForExtraSugar = 0;
+      data.extraMilk = 0;
+      pause(1);
+      set(data.consoleOutput, "string", cstrcat("The total is ", num2str(data.coffeePrice{str2num(data.number)}), "KM"));
+      data.enableButtons = 0;
+      data.enableInteractions = 1;
+    endif
+
+    if (data.askForExtraSugar == 1)
+      data.askForExtraSugar = 0;
+      data.extraSugar = 0;
+      pause(1);
+      set(data.consoleOutput, "string", "Do you want extra milk?");
+      data.askForExtraMilk = 1;
+    endif
+
     if (data.numberEntered == 0)
       data.number = "";
       set(data.consoleOutput, "string", data.number);
@@ -125,6 +195,9 @@ function buttonPressed(hObject, eventdata, value)
 
     endif
   else
+    if (data.enableNumbers == 0)
+      return;
+    endif
     data.number = strcat(data.number, value);
     display(data.number);
     set(data.consoleOutput, "string", data.number);
@@ -136,7 +209,7 @@ endfunction
 
 function interactionPressed(hObject, eventdata, value)
 
-  data = guidata(gcf());
-  set(data.consoleOutput, "string", value);
+  #data = guidata(gcf());
+  #set(data.consoleOutput, "string", value);
 
 endfunction
