@@ -22,12 +22,13 @@ titleFrame = uipanel('Parent', mainFrame, 'position', [0 .85 1 .15],'HighLightCo
 
 rightHalf = uipanel('Parent', mainFrame, 'position', [0.5 0 0.5 .85],'backgroundcolor', primaryColor, 'HighLightColor', primaryColor );
 keypadFrame = uipanel('Parent', rightHalf, 'position', [0.05 0.3 0.5 0.5],'HighLightColor', primaryColor );
-coffeSlotFrame = uipanel('Parent', rightHalf, 'position', [0.6 0.3 0.35 0.5],'HighLightColor', primaryColor );
+coffeeSlotFrame = uipanel('Parent', rightHalf, 'position', [0.6 0.3 0.35 0.5],'HighLightColor', primaryColor );
 
 leftHalf = uipanel('Parent', mainFrame, 'position', [0 0 .5 0.85],'backgroundcolor', primaryColor ,'HighLightColor', primaryColor );
 coffeeMenu = uipanel('Parent', leftHalf, 'position', [0.025 0.05 0.95 .9], 'backgroundcolor', primaryColor,'HighLightColor', primaryColor );
 
 % Set up all elements
+data.coffeeGifDisplayAxes = axes('Parent', coffeeSlotFrame,'position', [0 0 1 1], 'xtick', [], 'ytick', [], 'xlim', [0 1], 'ylim', [0 1], 'Color', primaryColor);
 data.consoleOutput = uicontrol(rightHalf, 'Style', 'edit', 'units', 'normalized' ,"string", "plot title: (text)","position", [0.05 0.85 0.9 0.13], 'Max', 5, 'Min', 0, 'enable', 'off','backgroundcolor', '#000000');
 
 % Set up title
@@ -62,5 +63,17 @@ for i = 1:3
 	end
 end
 
+% Set up gif playing:
+function playLoadingBar(figureObject, timeDuration)
+	data = guidata(figureObject);
+	axes(data.coffeeGifDisplayAxes)
+
+	for i = 1:450
+		frame = imread(strcat('./CoffeePercentBarFrames/finalCoffeeVideo-', num2str(i), '.png'));
+		imshow(frame, []);
+		pause(timeDuration/450);
+	end
+end
 
 guidata(mainFrame, data);
+playLoadingBar(mainFrame, 4);
