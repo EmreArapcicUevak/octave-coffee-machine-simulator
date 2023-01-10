@@ -18,11 +18,6 @@ function coffeeMachineSimulator()
   data.enableNumbers = 1;
   guidata(gcf(), data);
 
-  # TESTING _---------------------------------
-
-  data = guidata(gcf());
-  #set(data.consoleOutput, "string", "vedad");
-
 endfunction
 
 
@@ -131,7 +126,6 @@ function buttonPressed(hObject, eventdata, value)
   data = guidata(gcf());
 
   if (data.enableButtons != 1)
-    display("TEST");
     return;
   endif
 
@@ -203,7 +197,6 @@ function buttonPressed(hObject, eventdata, value)
       return;
     endif
     data.number = strcat(data.number, value);
-    display(data.number);
     set(data.consoleOutput, "string", data.number);
   endif
 
@@ -226,7 +219,6 @@ function interactionPressed(hObject, eventdata, value)
   endif
 
   if (value == "takeChange")
-    display("Change taken");
     if (data.hasChange == 1)
       data.hasChange = 0;
       set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
@@ -254,7 +246,6 @@ function interactionPressed(hObject, eventdata, value)
   endif
 
   numValue = str2num(value);
-  display(numValue);
   data.coffeePrice{str2num(data.number)} -= numValue;
   strValue = num2str(data.coffeePrice{str2num(data.number)});
 
