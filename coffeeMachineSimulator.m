@@ -126,7 +126,7 @@ function setupGUI()
 
 end
 
-
+# For all buttons on the keypad
 function buttonPressed(hObject, eventdata, value)
 
   data = guidata(gcf());
@@ -135,6 +135,7 @@ function buttonPressed(hObject, eventdata, value)
     return;
   end
 
+  # Yes Butoon
   if (value == 'yes')
 
     if (data.askForExtraMilk == 1)
@@ -171,7 +172,9 @@ function buttonPressed(hObject, eventdata, value)
         end
     else
 
-    end
+  end
+
+  # No Button
   elseif (value == 'no ')
 
     if (data.askForExtraMilk == 1)
@@ -197,7 +200,9 @@ function buttonPressed(hObject, eventdata, value)
       set(data.consoleOutput, 'string', data.number);
     else
 
-    end
+  end
+
+  # Number Buttons
   else
     if (data.enableNumbers == 0)
       return;
@@ -210,9 +215,12 @@ function buttonPressed(hObject, eventdata, value)
 
 end
 
+
+# For all interactions on the menubar
 function interactionPressed(hObject, eventdata, value)
 
   data = guidata(gcf());
+
 
   if (value == 'takeCoffee')
     if (data.coffeeFinished == 1)
@@ -224,6 +232,7 @@ function interactionPressed(hObject, eventdata, value)
       return;
     end
   end
+
 
   if (value == 'takeChange')
     if (data.hasChange == 1)
@@ -260,22 +269,27 @@ function interactionPressed(hObject, eventdata, value)
     end
   end
 
+
   guidata(gcf(), data);
+
 
   if (data.coffeePaid == 1)
     return;
   end
 
+
   numValue = str2num(value);
   data.coffeePrice{str2num(data.number)} -= numValue;
-
-
-
   strValue = num2str(data.coffeePrice{str2num(data.number)});
 
+
   if (data.coffeePrice{str2num(data.number)} > 0)
+
     set(data.consoleOutput, 'string', strcat(strValue, 'KM left to enter.'));
+
+
   elseif (data.coffeePrice{str2num(data.number)} == 0)
+
     set(data.consoleOutput, 'string', 'Please wait while the coffee is being made.');
     data.coffeePaid = 1;
     pause(1);
@@ -304,6 +318,8 @@ function interactionPressed(hObject, eventdata, value)
     end
     pause(2);
     set(data.consoleOutput, 'string', 'Please take your coffee.');
+
+
   else
     set(data.consoleOutput, 'string', 'Please take your change');
     data.hasChange = 1;
