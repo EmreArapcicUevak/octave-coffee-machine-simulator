@@ -225,10 +225,10 @@ function interactionPressed(hObject, eventdata, value)
       set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
       pause(1);
 
-      [y, fs] = audioread("./Audio/CoffeeMakerSound.mp3");
+      [y, fs] = audioread("./Audio/CoffeeMakerSound.wav");
       player = audioplayer(y, fs);
       playblocking(player);
-      [y, fs] = audioread("./Audio/CoffeeDoneSound.mp3");
+      [y, fs] = audioread("./Audio/CoffeeDoneSound.wav");
       player = audioplayer(y, fs);
       playblocking(player);
 
@@ -265,10 +265,12 @@ function interactionPressed(hObject, eventdata, value)
     data.coffeePaid = 1;
     pause(1);
 
-    [y, fs] = audioread("./Audio/CoffeeMakerSound.mp3");
+    #Anim = imshow("./Animations/finalCoffeeVideo.gif");
+
+    [y, fs] = audioread("./Audio/CoffeeMakerSound.wav");
     player = audioplayer(y, fs);
     playblocking(player);
-    [y, fs] = audioread("./Audio/CoffeeDoneSound.mp3");
+    [y, fs] = audioread("./Audio/CoffeeDoneSound.wav");
     player = audioplayer(y, fs);
     playblocking(player);
 
