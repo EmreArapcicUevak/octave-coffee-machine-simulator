@@ -224,7 +224,14 @@ function interactionPressed(hObject, eventdata, value)
       data.hasChange = 0;
       set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
       pause(1);
-      # START THE COFFEE MAKING
+
+      [y, fs] = audioread("./Audio/CoffeeMakerSound.mp3");
+      player = audioplayer(y, fs);
+      playblocking(player);
+      [y, fs] = audioread("./Audio/CoffeeDoneSound.mp3");
+      player = audioplayer(y, fs);
+      playblocking(player);
+
       if (data.extraSugar == 1 && data.extraMilk == 1)
         set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar and extra milk."));
       elseif(data.extraSugar == 1 && data.extraMilk == 0)
@@ -257,7 +264,14 @@ function interactionPressed(hObject, eventdata, value)
     set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
     data.coffeePaid = 1;
     pause(1);
-    # START THE COFFEE MAKING
+
+    [y, fs] = audioread("./Audio/CoffeeMakerSound.mp3");
+    player = audioplayer(y, fs);
+    playblocking(player);
+    [y, fs] = audioread("./Audio/CoffeeDoneSound.mp3");
+    player = audioplayer(y, fs);
+    playblocking(player);
+
     data.coffeeFinished = 1;
     if (data.extraSugar == 1 && data.extraMilk == 1)
       set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar and extra milk."));
