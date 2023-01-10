@@ -64,13 +64,19 @@ function setupGUI()
 
   rightHalf = uipanel('Parent', mainFrame, 'position', [0.5 0 0.5 .85],'backgroundcolor', primaryColor, 'HighLightColor', primaryColor );
   keypadFrame = uipanel('Parent', rightHalf, 'position', [0.05 0.3 0.5 0.5],'HighLightColor', primaryColor );
-  coffeSlotFrame = uipanel('Parent', rightHalf, 'position', [0.6 0.3 0.35 0.5],'HighLightColor', primaryColor );
+  coffeeSlotFrame = uipanel('Parent', rightHalf, 'position', [0.6 0.3 0.35 0.5],'HighLightColor', primaryColor );
 
   leftHalf = uipanel('Parent', mainFrame, 'position', [0 0 .5 0.85],'backgroundcolor', primaryColor ,'HighLightColor', primaryColor );
   coffeeMenu = uipanel('Parent', leftHalf, 'position', [0.025 0.05 0.95 .9], 'backgroundcolor', primaryColor,'HighLightColor', primaryColor );
 
   # Set up all elements
+  data.coffeeGifDisplayAxes = axes('Parent', coffeeSlotFrame,'position', [0 0 1 1], 'xtick', [], 'ytick', [], 'xlim', [0 1], 'ylim', [0 1], 'Color', primaryColor);
   data.consoleOutput = uicontrol(rightHalf, 'Style', 'edit', 'units', 'normalized' ,"string", "IUS Coffee Machine","position", [0.05 0.85 0.9 0.13], 'Max', 5, 'Min', 0, 'enable', 'off',"backgroundcolor", "#000000");
+
+  # Set up coffee animation
+  axes(data.coffeeGifDisplayAxes)
+  frame = imread('./CoffeePercentBarFrames/finalCoffeeVideo-0.png');
+  imshow(frame, []);
 
   # Set up title
   uicontrol('parent', titleFrame, 'Style', 'text', 'units', 'normalized' ,"string", "IUS COFFEE","position", [0 0 1 1], 'backgroundcolor', primaryColor, 'fontsize', 18);
@@ -212,7 +218,7 @@ function interactionPressed(hObject, eventdata, value)
     if (data.coffeeFinished == 1)
       set(data.consoleOutput, "string", "Enjoy your coffee.");
       pause(2);
-      close;
+      close all;
     else
       return;
     endif
@@ -225,12 +231,17 @@ function interactionPressed(hObject, eventdata, value)
       set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
       pause(1);
 
-      [y, fs] = audioread("./Audio/CoffeeMakerSound.wav");
+      # Coffee making sound and animation
+      [y, fs] = audioread("./Audio/coffeeMakingAudio.wav");
       player = audioplayer(y, fs);
-      playblocking(player);
-      [y, fs] = audioread("./Audio/CoffeeDoneSound.wav");
-      player = audioplayer(y, fs);
-      playblocking(player);
+      play(player);
+
+      axes(data.coffeeGifDisplayAxes)
+	    for i = 1:49
+		    frame = imread(strcat('./CoffeePercentBarFrames/finalCoffeeVideo-', num2str(i), '.png'));
+		    imshow(frame, []);
+		    pause(50/450);
+	    end
 
       if (data.extraSugar == 1 && data.extraMilk == 1)
         set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar and extra milk."));
@@ -256,6 +267,9 @@ function interactionPressed(hObject, eventdata, value)
 
   numValue = str2num(value);
   data.coffeePrice{str2num(data.number)} -= numValue;
+
+
+
   strValue = num2str(data.coffeePrice{str2num(data.number)});
 
   if (data.coffeePrice{str2num(data.number)} > 0)
@@ -265,14 +279,17 @@ function interactionPressed(hObject, eventdata, value)
     data.coffeePaid = 1;
     pause(1);
 
-    #Anim = imshow("./Animations/finalCoffeeVideo.gif");
+    # Coffee making sound and animation
+    [y, fs] = audioread("./Audio/coffeeMakingAudio.wav");
+    player = audioplayer(y, fs);
+    play(player);
 
-    [y, fs] = audioread("./Audio/CoffeeMakerSound.wav");
-    player = audioplayer(y, fs);
-    playblocking(player);
-    [y, fs] = audioread("./Audio/CoffeeDoneSound.wav");
-    player = audioplayer(y, fs);
-    playblocking(player);
+    axes(data.coffeeGifDisplayAxes)
+	  for i = 1:49
+		  frame = imread(strcat('./CoffeePercentBarFrames/finalCoffeeVideo-', num2str(i), '.png'));
+		  imshow(frame, []);
+		  pause(50/450);
+	  end
 
     data.coffeeFinished = 1;
     if (data.extraSugar == 1 && data.extraMilk == 1)
