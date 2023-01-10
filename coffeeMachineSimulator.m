@@ -50,6 +50,8 @@ function setupGUI()
   data.coffeePrice{7} = 10.95;
   data.coffeePrice{8} = 4.20;
   data.coffeePrice{9} = 0.80;
+  data.coffeePaid = 0;
+  data.hasChange = 0;
   data.enableButtons = 0;
   data.enableNumbers = 0;
   data.enableInteractions = 0;
@@ -59,6 +61,7 @@ function setupGUI()
   data.askForExtraMilk = 0;
   data.extraMilk = 0;
   data.extraSugar = 0;
+  data.coffeeFinished = 0;
 
   # Set up all needed frames
   mainFrame = figure('position', [0 0 800 600], 'Name', 'Coffee Machine', 'NumberTitle', 'off','color', primaryColor,'toolbar','none', 'resize', 'off');
@@ -79,14 +82,15 @@ function setupGUI()
 
   # Set up menubar
   interactions = uimenu("Text", "Interactions");
-  interactionsItem1 = uimenu(interactions, "Text", "Insert 5KM", 'callback', { @interactionPressed, "5KM" });
-  interactionsItem2 = uimenu(interactions, "Text", "Insert 2KM", 'callback', { @interactionPressed, "2KM" });
-  interactionsItem3 = uimenu(interactions, "Text", "Insert 1KM", 'callback', { @interactionPressed, "1KM" });
-  interactionsItem4 = uimenu(interactions, "Text", "Insert 50F", 'callback', { @interactionPressed, "50F" });
-  interactionsItem5 = uimenu(interactions, "Text", "Insert 20F", 'callback', { @interactionPressed, "20F" });
-  interactionsItem6 = uimenu(interactions, "Text", "Insert 10F", 'callback', { @interactionPressed, "10F" });
-  interactionsItem7 = uimenu(interactions, "Text", "Insert 5F", 'callback', { @interactionPressed, "5F" });
-  interactionsItem8 = uimenu(interactions, "Text", "Take the coffee", 'callback', { @interactionPressed, "ttc" });
+  interactionsItem1 = uimenu(interactions, "Text", "Insert 5KM", 'callback', { @interactionPressed, "5         " });
+  interactionsItem2 = uimenu(interactions, "Text", "Insert 2KM", 'callback', { @interactionPressed, "2         " });
+  interactionsItem3 = uimenu(interactions, "Text", "Insert 1KM", 'callback', { @interactionPressed, "1         " });
+  interactionsItem4 = uimenu(interactions, "Text", "Insert 50F", 'callback', { @interactionPressed, "0.5       " });
+  interactionsItem5 = uimenu(interactions, "Text", "Insert 20F", 'callback', { @interactionPressed, "0.2       " });
+  interactionsItem6 = uimenu(interactions, "Text", "Insert 10F", 'callback', { @interactionPressed, "0.1       " });
+  interactionsItem7 = uimenu(interactions, "Text", "Insert 5F", 'callback', { @interactionPressed, "0.05      " });
+  interactionsItem8 = uimenu(interactions, "Text", "Take the coffee", 'callback', { @interactionPressed, "takeCoffee" });
+  interactionsItem9 = uimenu(interactions, "Text", "Take the change", 'callback', { @interactionPressed, "takeChange" });
 
   # Set up KeyPad Buttons
   for i = 1:4
@@ -209,7 +213,76 @@ endfunction
 
 function interactionPressed(hObject, eventdata, value)
 
-  #data = guidata(gcf());
-  #set(data.consoleOutput, "string", value);
+  data = guidata(gcf());
+
+  if (value == "takeCoffee")
+    if (data.coffeeFinished == 1)
+      set(data.consoleOutput, "string", "Enjoy your coffee.");
+      pause(3);
+      close;
+    else
+      return;
+    endif
+  endif
+
+  if (value == "takeChange")
+    display("Change taken");
+    if (data.hasChange == 1)
+      data.hasChange = 0;
+      set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
+      pause(1);
+      # START THE COFFEE MAKING
+      data.coffeeFinished = 1;
+      if (data.extraSugar == 1 && data.extraMilk == 1)
+        set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar and extra milk."));
+      elseif(data.extraSugar == 1 && data.extraMilk == 0)
+        set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar."));
+      elseif(data.extraSugar == 0 && data.extraMilk == 1)
+        set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra milk."));
+      else
+        set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, "."));
+      endif
+      pause(2);
+      set(data.consoleOutput, "string", "Please take your coffee.");
+    else
+      return;
+    endif
+  endif
+
+  if (data.coffeePaid == 1)
+    return;
+  endif
+
+  numValue = str2num(value);
+  display(numValue);
+  data.coffeePrice{str2num(data.number)} -= numValue;
+  strValue = num2str(data.coffeePrice{str2num(data.number)});
+
+  if (data.coffeePrice{str2num(data.number)} > 0)
+    set(data.consoleOutput, "string", strcat(strValue, "KM left to enter."));
+  elseif (data.coffeePrice{str2num(data.number)} == 0)
+    set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
+    data.coffeePaid = 1;
+    pause(1);
+    # START THE COFFEE MAKING
+    data.coffeeFinished = 1;
+    if (data.extraSugar == 1 && data.extraMilk == 1)
+      set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar and extra milk."));
+    elseif(data.extraSugar == 1 && data.extraMilk == 0)
+      set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar."));
+    elseif(data.extraSugar == 0 && data.extraMilk == 1)
+      set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra milk."));
+    else
+      set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, "."));
+    endif
+    pause(2);
+    set(data.consoleOutput, "string", "Please take your coffee.");
+  else
+    set(data.consoleOutput, "string", "Please take your change");
+    data.hasChange = 1;
+    data.coffeePaid = 1;
+  endif
+
+  guidata(gcf(), data);
 
 endfunction
