@@ -211,7 +211,7 @@ function interactionPressed(hObject, eventdata, value)
   if (value == "takeCoffee")
     if (data.coffeeFinished == 1)
       set(data.consoleOutput, "string", "Enjoy your coffee.");
-      pause(3);
+      pause(2);
       close;
     else
       return;
@@ -220,11 +220,11 @@ function interactionPressed(hObject, eventdata, value)
 
   if (value == "takeChange")
     if (data.hasChange == 1)
+      data.coffeeFinished = 1;
       data.hasChange = 0;
       set(data.consoleOutput, "string", "Please wait while the coffee is being made.");
       pause(1);
       # START THE COFFEE MAKING
-      data.coffeeFinished = 1;
       if (data.extraSugar == 1 && data.extraMilk == 1)
         set(data.consoleOutput, "string", cstrcat("Here is your ", data.coffeeNames{str2num(data.number)}, " with extra sugar and extra milk."));
       elseif(data.extraSugar == 1 && data.extraMilk == 0)
@@ -240,6 +240,8 @@ function interactionPressed(hObject, eventdata, value)
       return;
     endif
   endif
+
+  guidata(gcf(), data);
 
   if (data.coffeePaid == 1)
     return;
