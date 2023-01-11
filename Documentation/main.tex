@@ -95,7 +95,8 @@
 		
 	\section{Design}
 		\noindent Lets take a look at the code that was used to generate all the ui components
-		\begin{lstlisting}
+		\subsection{UI component set up}
+			\begin{lstlisting}
  % Set up all needed frames
   mainFrame = figure(
 		'position', [0 0 800 600],
@@ -153,22 +154,23 @@
 		'position', [0 0 1 1],
 		'backgroundcolor', primaryColor, 'fontsize', 18);
 
-		\end{lstlisting}
+			\end{lstlisting}
 
-		\noindent Quick note about about some of the functions used in the given code block:
-		\begin{itemize}
-			\item \textcolor{green}{Figure} is an function used for generating a new figure with the given properties.
-			\item \textcolor{green}{Uipanel} is a function used for generating a panel(frame) which acts as a group for other ui components.
-			\item \textcolor{green}{Axes} is a function used for generating a new axes with the given properties.
-		\end{itemize}
-		\noindent As we can see from line 2 to 8 we are generating a new figure that will not have a tool bar and will be called "Coffee Machine", it will as well not be resizable. it will start on the bottom left of the users screen with a fixed size of
-		$800 \times 600$ pixels. \\
+			\noindent Quick note about about some of the functions used in the given code block:
+			\begin{itemize}
+				\item \textcolor{green}{Figure} is an function used for generating a new figure with the given properties.
+				\item \textcolor{green}{Uipanel} is a function used for generating a panel(frame) which acts as a group for other ui components.
+				\item \textcolor{green}{Axes} is a function used for generating a new axes with the given properties.
+			\end{itemize}
+			\noindent As we can see from line 2 to 8 we are generating a new figure that will not have a tool bar and will be called "Coffee Machine", it will as well not be resizable. it will start on the bottom left of the users screen with a fixed size of
+			$800 \times 600$ pixels. \\
 
-		\noindent After that from line 10 all the way down to line 36 we will seperate the figure into multiple frames on on the far top for the title and then split it in 2 vertically with the rest of the space remaining, we called these spaces
-		\emph{rightHalf} and \emph{leftHalf} in our program. Afterwards we will set up some \emph{Axes} that will parented to the given frames which will be later used for image displaying. The coffeeGifDisplayAxes is an Axes that will be used for displaying a
-		progress bar type gif, but unfortunately since \emph{Octave} is really slow at handling image loading and does not have \emph{GIF} \textbf{nor} \emph{Video} support all the images had to be loaded one after another.\\
+			\noindent After that from line 10 all the way down to line 36 we will seperate the figure into multiple frames on on the far top for the title and then split it in 2 vertically with the rest of the space remaining, we called these spaces
+			\emph{rightHalf} and \emph{leftHalf} in our program. Afterwards we will set up some \emph{Axes} that will parented to the given frames which will be later used for image displaying. The coffeeGifDisplayAxes is an Axes that will be used for displaying a
+			progress bar type gif, but unfortunately since \emph{Octave} is really slow at handling image loading and does not have \emph{GIF} \textbf{nor} \emph{Video} support all the images had to be loaded one after another.\\
 
 		\hline
+		\subsection{Setting up Interacting drop down menu}
 		\begin{lstlisting}
 % Set up menubar
   interactions = uimenu('Text', 'Interactions');
@@ -199,11 +201,13 @@
   interactionsItem9 = uimenu(interactions, 'Text', 'Take the change', 'callback',
 		{ @interactionPressed, 'takeChange' });
 		\end{lstlisting}
-		\noindent The above presented code is fairly simple to understand, firstly we use \textcolor{green}{Uimenu} function to create a new menu component that will be dispalyed on the top of the frame, afterwards we just create the wanted tabs, parents them
-		to the given menu we just created, change their text, and a call back function to every single one of them.
+		
+			\noindent The above presented code is fairly simple to understand, firstly we use \textcolor{green}{Uimenu} function to create a new menu component that will be dispalyed on the top of the frame, afterwards we just create the wanted tabs, parents
+			them to the given menu we just created, change their text, and a call back function to every single one of them.
 
-		\pagebreak
+			\pagebreak
 
+		\subsection{Set up KeyPad buttons}
 		\begin{lstlisting}
 % Set up KeyPad Buttons
   for i = 1:4
@@ -255,6 +259,7 @@
 		document
 
 		\pagebreak
+		\subsection{Set up coffee menu}
 		\begin{lstlisting}
 % Set up for coffee menu
   for i = 1:3
@@ -296,10 +301,230 @@
 		make frames that all take $\frac{1}{3}$ of width and height of the available space. Afterwards it makes an axis and 2 text components that is lays next to each other vertically and sets all of their properties. \\
 		\hline
 		
+		\subsection{Save all UI data}
 		\begin{lstlisting}
 guidata(mainFrame, data);
 		\end{lstlisting}
 
 		\noindent And finally we will use this line of code to set up everything we have saved in the structure variables called \emph{"data"} and link that variable to the figure. We do this because Octaves scope is function based meaning any variables made
 		in a function is \emph{only} visible in the said function. But by doing this we can use the function guidata again to read the structure we connected to the figure element.
+
+		\pagebreak
+
+	\section{Functionality}
+		\noindent In this section we will take a look at the code responsible for functionality of the program.
+		\subsection{KeyPad Buttons Functionalities}
+			\begin{lstlisting}
+% For all buttons on the keypad
+function buttonPressed(hObject, eventdata, value)
+
+  data = guidata(gcf());
+
+  if (data.enableButtons != 1)
+    return;
+  end
+
+  % Yes Butoon
+  if (value == 'yes')
+
+    if (data.askForExtraMilk == 1)
+      data.askForExtraMilk = 0;
+      data.askForExtraSugar = 0;
+      data.extraMilk = 1;
+      pause(1);
+      set(data.consoleOutput, 'string', cstrcat('The total is ', num2str(data.coffeePrice{str2num(data.number)}), 'KM'));
+      data.enableButtons = 0;
+      data.enableInteractions = 1;
+    end
+
+    if (data.askForExtraSugar == 1)
+      data.askForExtraSugar = 0;
+      data.extraSugar = 1;
+      pause(1);
+      set(data.consoleOutput, 'string', 'Do you want extra milk?');
+      data.askForExtraMilk = 1;
+    end
+
+    if (data.numberEntered == 0)
+        if (str2num(data.number) == 1 || str2num(data.number) == 2 || str2num(data.number) == 3 || str2num(data.number) == 4 || str2num(data.number) == 5 || str2num(data.number) == 6 || str2num(data.number) == 7 || str2num(data.number) == 8 || str2num(data.number) == 9)
+          set(data.consoleOutput, 'string', strcat(data.coffeeNames{str2num(data.number)}, ' selected.'));
+          pause(1);
+          data.numberEntered = 1;
+          data.enableNumbers = 0;
+          set(data.consoleOutput, 'string', 'Do you want extra sugar?');
+          data.askForExtraSugar = 1;
+        else
+          set(data.consoleOutput, 'string', 'Wrong number entered.');
+          pause(2);
+          data.number = '';
+          set(data.consoleOutput, 'string', data.number);
+        end
+  end
+
+  % No Button
+  elseif (value == 'no ')
+
+    if (data.askForExtraMilk == 1)
+      data.askForExtraMilk = 0;
+      data.askForExtraSugar = 0;
+      data.extraMilk = 0;
+      pause(1);
+      set(data.consoleOutput, 'string', cstrcat('The total is ', num2str(data.coffeePrice{str2num(data.number)}), 'KM'));
+      data.enableButtons = 0;
+      data.enableInteractions = 1;
+    end
+
+    if (data.askForExtraSugar == 1)
+      data.askForExtraSugar = 0;
+      data.extraSugar = 0;
+      pause(1);
+      set(data.consoleOutput, 'string', 'Do you want extra milk?');
+      data.askForExtraMilk = 1;
+    end
+
+    if (data.numberEntered == 0)
+      data.number = '';
+      set(data.consoleOutput, 'string', data.number);
+    else
+
+  end
+
+  % Number Buttons
+  else
+    if (data.enableNumbers == 0)
+      return;
+    end
+    data.number = strcat(data.number, value);
+    set(data.consoleOutput, 'string', data.number);
+  end
+
+  guidata(gcf(), data);
+
+end
+			\end{lstlisting}
+			\noindent This function is for all interactions with keypad of the coffee machine. It has every functionality for selecting which coffee you want and if you want extra sugar and milk. 
+		\subsection{Coffee Machien Interaction Functionality}
+
+			\begin{lstlisting}
+% For all interactions on the menubar
+function interactionPressed(hObject, eventdata, value)
+
+  data = guidata(gcf());
+
+
+  if (value == 'takeCoffee')
+    if (data.coffeeFinished == 1)
+      set(data.consoleOutput, 'string', 'Enjoy your coffee.');
+      pause(2);
+      close all;
+      return;
+    else
+      return;
+    end
+  end
+
+
+  if (value == 'takeChange')
+    if (data.hasChange == 1)
+      data.coffeeFinished = 1;
+      data.hasChange = 0;
+      set(data.consoleOutput, 'string', 'Please wait while the coffee is being made.');
+      pause(1);
+
+      % Coffee making sound and animation
+      [y, fs] = audioread('./Audio/coffeeMakingAudio.wav');
+      player = audioplayer(y, fs);
+      play(player);
+
+      axes(data.coffeeGifDisplayAxes)
+	    for i = 1:49
+		    frame = imread(strcat('./CoffeePercentBarFrames/finalCoffeeVideo-', num2str(i), '.png'));
+		    imshow(frame, []);
+		    pause(50/450);
+	    end
+
+      if (data.extraSugar == 1 && data.extraMilk == 1)
+        set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, ' with extra sugar and extra milk.'));
+      elseif(data.extraSugar == 1 && data.extraMilk == 0)
+        set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, ' with extra sugar.'));
+      elseif(data.extraSugar == 0 && data.extraMilk == 1)
+        set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, ' with extra milk.'));
+      else
+        set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, '.'));
+      end
+      pause(2);
+      set(data.consoleOutput, 'string', 'Please take your coffee.');
+    else
+      return;
+    end
+  end
+
+
+  guidata(gcf(), data);
+
+
+  if (data.coffeePaid == 1)
+    return;
+  end
+
+
+  numValue = str2num(value);
+  data.coffeePrice{str2num(data.number)} -= numValue;
+  strValue = num2str(data.coffeePrice{str2num(data.number)});
+
+
+  if (data.coffeePrice{str2num(data.number)} > 0)
+
+    set(data.consoleOutput, 'string', strcat(strValue, 'KM left to enter.'));
+
+
+  elseif (data.coffeePrice{str2num(data.number)} == 0)
+
+    set(data.consoleOutput, 'string', 'Please wait while the coffee is being made.');
+    data.coffeePaid = 1;
+    pause(1);
+
+    % Coffee making sound and animation
+    [y, fs] = audioread('./Audio/coffeeMakingAudio.wav');
+    player = audioplayer(y, fs);
+    play(player);
+
+    axes(data.coffeeGifDisplayAxes)
+	  for i = 1:49
+		  frame = imread(strcat('./CoffeePercentBarFrames/finalCoffeeVideo-', num2str(i), '.png'));
+		  imshow(frame, []);
+		  pause(50/450);
+	  end
+
+    data.coffeeFinished = 1;
+    if (data.extraSugar == 1 && data.extraMilk == 1)
+      set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, ' with extra sugar and extra milk.'));
+    elseif(data.extraSugar == 1 && data.extraMilk == 0)
+      set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, ' with extra sugar.'));
+    elseif(data.extraSugar == 0 && data.extraMilk == 1)
+      set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, ' with extra milk.'));
+    else
+      set(data.consoleOutput, 'string', cstrcat('Here is your ', data.coffeeNames{str2num(data.number)}, '.'));
+    end
+    pause(2);
+    set(data.consoleOutput, 'string', 'Please take your coffee.');
+
+
+  else
+    set(data.consoleOutput, 'string', 'Please take your change');
+    data.hasChange = 1;
+    data.coffeePaid = 1;
+  end
+
+  guidata(gcf(), data);
+
+end
+			\end{lstlisting}
+
+			\noindent This function is for all the interactions options that can be found in the intercation drop down menu like:
+			\begin{itemize}
+				\item Inserting coins
+				\item Taking change
+				\item Taking coffee 
+			\end{itemize}
 \end{document}
