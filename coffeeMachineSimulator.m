@@ -1,16 +1,16 @@
 function coffeeMachineSimulator()
 
-  # Clear junk variables
+  % Clear junk variables
   clear all;
   clc;
 
-  # Close other frames
+  % Close other frames
   close all;
 
-  # Set up the GUI of the application
+  % Set up the GUI of the application
   setupGUI();
 
-  # Starts the application process
+  % Starts the application process
   pause(1);
   data = guidata(gcf());
   set(data.consoleOutput, 'string', 'Please select the coffee you want');
@@ -23,7 +23,7 @@ end
 
 function setupGUI()
 
-  # Initilize needed variables
+  % Initilize needed variables
   primaryColor = '#787878'; secondaryColor = '#cdcdcd'; textColor = '#77AC30';
   data.coffeeOrderButtons = [];
   data.coffeeNames = cell(1, 6);
@@ -58,7 +58,7 @@ function setupGUI()
   data.extraSugar = 0;
   data.coffeeFinished = 0;
 
-  # Set up all needed frames
+  % Set up all needed frames
   mainFrame = figure('position', [0 0 800 600], 'Name', 'Coffee Machine', 'NumberTitle', 'off','color', primaryColor,'toolbar','none', 'resize', 'off');
   titleFrame = uipanel('Parent', mainFrame, 'position', [0 .85 1 .15],'HighLightColor', primaryColor);
 
@@ -69,19 +69,19 @@ function setupGUI()
   leftHalf = uipanel('Parent', mainFrame, 'position', [0 0 .5 0.85],'backgroundcolor', primaryColor ,'HighLightColor', primaryColor );
   coffeeMenu = uipanel('Parent', leftHalf, 'position', [0.025 0.05 0.95 .9], 'backgroundcolor', primaryColor,'HighLightColor', primaryColor );
 
-  # Set up all elements
+  % Set up all elements
   data.coffeeGifDisplayAxes = axes('Parent', coffeeSlotFrame,'position', [0 0 1 1], 'xtick', [], 'ytick', [], 'xlim', [0 1], 'ylim', [0 1], 'Color', primaryColor);
   data.consoleOutput = uicontrol(rightHalf, 'Style', 'edit', 'units', 'normalized' ,'string', 'IUS Coffee Machine','position', [0.05 0.85 0.9 0.13], 'Max', 5, 'Min', 0, 'enable', 'off','backgroundcolor', '#000000');
 
-  # Set up coffee animation
+  % Set up coffee animation
   axes(data.coffeeGifDisplayAxes)
   frame = imread('./CoffeePercentBarFrames/finalCoffeeVideo-0.png');
   imshow(frame, []);
 
-  # Set up title
+  % Set up title
   uicontrol('parent', titleFrame, 'Style', 'text', 'units', 'normalized' ,'string', 'IUS COFFEE','position', [0 0 1 1], 'backgroundcolor', primaryColor, 'fontsize', 18);
 
-  # Set up menubar
+  % Set up menubar
   interactions = uimenu('Text', 'Interactions');
   interactionsItem1 = uimenu(interactions, 'Text', 'Insert 5KM', 'callback', { @interactionPressed, '5         ' });
   interactionsItem2 = uimenu(interactions, 'Text', 'Insert 2KM', 'callback', { @interactionPressed, '2         ' });
@@ -93,7 +93,7 @@ function setupGUI()
   interactionsItem8 = uimenu(interactions, 'Text', 'Take the coffee', 'callback', { @interactionPressed, 'takeCoffee' });
   interactionsItem9 = uimenu(interactions, 'Text', 'Take the change', 'callback', { @interactionPressed, 'takeChange' });
 
-  # Set up KeyPad Buttons
+  % Set up KeyPad Buttons
   for i = 1:4
 	  for j = 1:3
 		  if (i != 4)
@@ -110,7 +110,7 @@ function setupGUI()
 	  end
   end
 
-  # Set up for coffee menu
+  % Set up for coffee menu
   for i = 1:3
 	  for j = 1:3
 		  if (3*(i-1) + j > length(data.coffeeNames)) break; end
@@ -126,7 +126,7 @@ function setupGUI()
 
 end
 
-# For all buttons on the keypad
+% For all buttons on the keypad
 function buttonPressed(hObject, eventdata, value)
 
   data = guidata(gcf());
@@ -135,7 +135,7 @@ function buttonPressed(hObject, eventdata, value)
     return;
   end
 
-  # Yes Butoon
+  % Yes Butoon
   if (value == 'yes')
 
     if (data.askForExtraMilk == 1)
@@ -170,11 +170,9 @@ function buttonPressed(hObject, eventdata, value)
           data.number = '';
           set(data.consoleOutput, 'string', data.number);
         end
-    else
-
   end
 
-  # No Button
+  % No Button
   elseif (value == 'no ')
 
     if (data.askForExtraMilk == 1)
@@ -202,7 +200,7 @@ function buttonPressed(hObject, eventdata, value)
 
   end
 
-  # Number Buttons
+  % Number Buttons
   else
     if (data.enableNumbers == 0)
       return;
@@ -216,7 +214,7 @@ function buttonPressed(hObject, eventdata, value)
 end
 
 
-# For all interactions on the menubar
+% For all interactions on the menubar
 function interactionPressed(hObject, eventdata, value)
 
   data = guidata(gcf());
@@ -241,7 +239,7 @@ function interactionPressed(hObject, eventdata, value)
       set(data.consoleOutput, 'string', 'Please wait while the coffee is being made.');
       pause(1);
 
-      # Coffee making sound and animation
+      % Coffee making sound and animation
       [y, fs] = audioread('./Audio/coffeeMakingAudio.wav');
       player = audioplayer(y, fs);
       play(player);
@@ -294,7 +292,7 @@ function interactionPressed(hObject, eventdata, value)
     data.coffeePaid = 1;
     pause(1);
 
-    # Coffee making sound and animation
+    % Coffee making sound and animation
     [y, fs] = audioread('./Audio/coffeeMakingAudio.wav');
     player = audioplayer(y, fs);
     play(player);
