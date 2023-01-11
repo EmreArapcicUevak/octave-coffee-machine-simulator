@@ -59,7 +59,7 @@
 }
 
 % Custom commands
-
+\def\checkmark{\tikz\fill[scale=0.45](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
 
 \begin{document}
 	\begin{figure}
@@ -79,4 +79,16 @@
 	\tableofcontents
 	\pagebreak
 
+	\section{Assignments}
+		\noindent The following table will show all the assignemtns taken by the corresponding students:
+		{
+			\center
+			\begin{tabular}{|c|c|c|}
+				\hline
+					& \textsc{Emre Arapcic-Uevak} & \textsc{Vedad Siljic} \\ \hline
+				Design  & \checkmark \checkmark & x \\ \hline
+				Functionality & x & \checkmark \checkmark \\ \hline
+			\end{tabular}
+			\par
+		}
 \end{document}
